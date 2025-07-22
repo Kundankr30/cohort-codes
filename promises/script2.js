@@ -1,8 +1,10 @@
-function random(resolve){// reseolve is also a function
-        resolve();
+function random(resolve){
+        setTimeout(resolve,10000);
 }
-let p  =new Promise(random);
+let p =new Promise(random);
+
 function callback(){
     console.log("promise succeded");
 }
 p.then(callback);
+
