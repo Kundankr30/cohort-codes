@@ -2,7 +2,6 @@ const express= require('express');
 const app= express();
 const jwt = require("jsonwebtoken");
 const JWT_SECRET = "fuckoffap";
-//jwt secret is real thing
 app.use(express.json());
 const users=[];
 function logger(req,res,next){
@@ -29,7 +28,8 @@ app.post("/signin",logger,function(req,res){
     const username = req.body.username;
     const password = req.body.password;
     let founduser = null;
-    for(let i =0 ;i<users.length;i++){
+    let i;
+    for( i =0 ;i<users.length;i++){
         if(users[i].username==username){
             founduser= users[i];
 
@@ -46,10 +46,11 @@ app.post("/signin",logger,function(req,res){
         },JWT_SECRET)
      res.json({
         message:"SignUp sucessfull",
-        Token : token
+        token : token
 
     })
     console.log(founduser);
+    console.log(token);
 
     }
 
@@ -72,10 +73,11 @@ app.get("/me",logger,auth ,function (req, res) {
     const currentuser =  req.username;
     //const token = req.headers.token;
     //const decoded = jwt.verify(token,JWT_SECRET);
+    let founduser;
 
         for(let i=0;i<users.length;i++){
             if(users[i].username===currentuser){
-                founduser = users[i];
+                 founduser = users[i];
             }
         }
        

@@ -3,8 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Login Page</title>
+<link rel="icon" href="icons8-favorite-16.png" type="image/x-icon">
+
+    
 </head>
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.11.0/axios.min.js"></script>
 <script>
    async function signup(){
@@ -25,9 +29,27 @@ async function signin(){
         username:username,
         password:password
     })
+    //local storage stores the token 
     localStorage.setItem("token",response.data.token);
     alert("You are signed in"); 
+    
 }
+
+        async function getUserInformation() {
+            const token = localStorage.getItem("token");
+            try {
+                const response = await axios.get("http://localhost:3000/me", {
+                    headers: { token: token }
+                });
+                const user = response.data;
+                document.getElementById("profile-info").innerHTML = `<b>Username:</b> ${user.username}`;
+            } 
+            catch (error) {
+                console.error("Failed to fetch user info:", error);
+                document.getElementById("profile-info").innerHTML = "Could not load profile. Your session may be invalid.";
+            }
+        }
+        getUserInformation();
    
     
 </script>
@@ -44,6 +66,10 @@ async function signin(){
     <input id="signin-password"type="password" name="password" placeholder="password">
     <button onclick="signin()">Submit</button>
    </div> 
+   <div>
+    User information:
+    <div id="information">Loading user data...</div>
+   </div>
    <div>
     <button onclick="logout()">Logout</button>
    </div>
