@@ -1,5 +1,8 @@
 const express = require('express');
 const app= express();
+const JWT_SECRET = "thisisfortheworld";
+const jwt = require('jsonwebtoken');
+
 app.use(express.json());
 const users=[];
 function generateToken() {
@@ -7,7 +10,7 @@ function generateToken() {
 
     let token = "";
     for (let i = 0; i < 32; i++) {
-        // use a simple function here
+
         token += options[Math.floor(Math.random() * options.length)];
     }
     return token;
@@ -24,7 +27,7 @@ app.post("/singup",function(req,res){
     })
 
 })
-app.post("/singin",function(req,res){
+app.post("/signin",function(req,res){
     const username = req.body.username;
     const password =req.body.password;
     let foundUser =null;
@@ -36,7 +39,9 @@ app.post("/singin",function(req,res){
         }
     }
     if(foundUser){
-        const token = generateToken();
+        const token = jwt.sign({
+            username:username,
+        },JWT_SECRET);
        foundUser.token=token;
         res.json({
             message:token,

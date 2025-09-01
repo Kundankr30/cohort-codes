@@ -1,9 +1,16 @@
 const express = require('express');
 const app = express();
+const cors= require('cors');
+const path = require('path');
+
 
 app.use(express.json()); 
+app.use(cors());
 
 let noofrequest = 0;
+app.get("/",function(req,res){
+    res.sendFile(path.join(__dirname, "index.html"));
+})
 
 function middleware(req, res, next) {
     noofrequest++;
@@ -21,29 +28,27 @@ function middleware(req, res, next) {
 
 app.use(middleware);
 
-// Addition route with two params
 app.get("/add/:firstarg/:secondarg", (req, res) => {
     let a = parseInt(req.params.firstarg);
     let b = parseInt(req.params.secondarg);
     res.json({ ans: a + b });
 });
 
-// Subtraction route with query params
+
 app.get("/sub", (req, res) => {
     let a = parseInt(req.query.a);
     let b = parseInt(req.query.b);
     res.json({ ans: a - b });
 });
 
-// Multiplication route with params fixed
 app.get("/product/:a/:b", (req, res) => {
     let a = parseInt(req.params.a);
     let b = parseInt(req.params.b);
     res.json({ ans: a * b });
 });
+app.get("/divide/:a/:b",(req,res)=>{
 
-// Division route with error handling
-app.get("/divide", (req, res) => {
+
     let a = parseInt(req.query.a);
     let b = parseInt(req.query.b);
 
