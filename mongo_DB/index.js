@@ -7,7 +7,7 @@ const mongoose = require("mongoose");
 const {z} = require("zod");
 //yes something have changed
 
-mongoose.connect("mongodb+srv://kundanixr:Kundan%40123@cluster0.6bcwq1b.mongodb.net/");
+mongoose.connect("");
 app.use(express.json());
 
 app.post("/signup", async function(req, res) {
