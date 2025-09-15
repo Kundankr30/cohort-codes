@@ -1,13 +1,13 @@
+//these are library which are needed in project
 const express = require("express");
-const app = express();
 const { UserModel, TodoModel } = require("./db");
 const { auth, JWT_SECRET } = require("./auth");
 const jwt = require("jsonwebtoken");
 const mongoose = require("mongoose");
-const {z} = require("zod");
 //yes something have changed
 
-mongoose.connect("");
+mongoose.connect("DATABASE_URL")
+const app = express();
 app.use(express.json());
 
 app.post("/signup", async function(req, res) {
@@ -28,28 +28,24 @@ if(!reqbody.success){
     const email = req.body.email;
     const password = req.body.password;
     const name = req.body.name;
-   // if(!email.isString()|| !email.contains("@")){
-     //   res.json({
-       //     message:"Enter a Valid Email, Try Again"
-       // });
-    //
 
 try{
     await UserModel.create({
         email: email,
-        password: password,
+        password: hashedpassword,
         name: name
     });
-    
+}
+catch(e){
+    res.status(403).json({
+        message:"User already exist"
+    })
+    errthrown = true;
+}
+    if(!errthrown){
     res.json({
         message: "You are signed up"
     })
-}
-catch(e){
-    res.json({
-        message:"User Already exists ,Try again"
-    })
-}
 });
 
 
@@ -60,8 +56,13 @@ app.post("/signin", async function(req, res) {
 
     const response = await UserModel.findOne({
         email: email,
-        password: password,
     });
+    if(!response){
+        res.status(403).json({
+            message:"Email not found , signup first"
+        })
+    }
+    const passwordmatched=bcrypt.match(password,response.password);
 
     if (response) {
         const token = jwt.sign({
