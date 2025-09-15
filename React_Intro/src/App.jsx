@@ -15,7 +15,7 @@ function App() {
   return(
     
     <div>
-      <p>Swastik body Count Counter</p>
+      <p>Swastik body-Count Counter</p>
       <button id="btn" onClick={onClickHandler}>
         Counter {count}
       </button>
